@@ -1,5 +1,13 @@
 import customtkinter
-import functions as func
+import convert_func as func
+from convert_func import get_conversions, get_currencies
+
+
+def final_currencies_by_key(selected_currency):
+    list_final_currency = available_conversions[selected_currency]
+    field_final_currency.configure(values=list_final_currency)
+    field_final_currency.set(list_final_currency[0])
+
 
 customtkinter.set_appearance_mode("system")
 
@@ -7,24 +15,28 @@ customtkinter.set_appearance_mode("system")
 window = customtkinter.CTk()
 window.geometry("600x600")
 
+available_conversions = get_conversions()
+
 # create all elements
 title = customtkinter.CTkLabel(window, text="Currency Converter", font=("Verdana", 26))
 
 original_currency = customtkinter.CTkLabel(window, text="Select original currency", font=("Verdana", 12))
-field_original_currency = customtkinter.CTkOptionMenu(window, values=["USD", "BRL", "EUR", "BTC"])
+field_original_currency = customtkinter.CTkOptionMenu(window, values=list(available_conversions.keys()), command=final_currencies_by_key)
+
 insert_value = customtkinter.CTkLabel(window, text="Value", font=("Verdana", 12))
 value = customtkinter.CTkEntry(window)
 
 new_currency = customtkinter.CTkLabel(window, text="Select currency to convert", font=("Verdana", 12))
-field_new_currency = customtkinter.CTkOptionMenu(window, values=["USD", "BRL", "EUR", "BTC"])
+field_final_currency = customtkinter.CTkOptionMenu(window, values=["Choose original currency!"])
 
 button_convert = customtkinter.CTkButton(window, text="Convert", command=func.convert_currency)
 
 currency_list = customtkinter.CTkScrollableFrame(window)
 
-available_currency = ["Euro", "Dollar", "Real", "BitCoin"]
-for currency in available_currency:
-    currency_text = customtkinter.CTkLabel(currency_list, text=currency, font=("Verdana", 12))
+available_currencies = get_currencies()
+for currency_code in available_currencies:
+    currency_name = available_currencies[currency_code]
+    currency_text = customtkinter.CTkLabel(currency_list, text=f"{currency_code} : {currency_name}", font=("Verdana", 12))
     currency_text.pack()
 
 # elements placement
@@ -37,7 +49,7 @@ field_original_currency.pack(padx=10, pady=5)
 
 
 new_currency.pack(padx=10, pady=20)
-field_new_currency.pack(padx=10)
+field_final_currency.pack(padx=10)
 
 button_convert.pack(padx=10, pady=40)
 
