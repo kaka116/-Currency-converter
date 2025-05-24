@@ -1,5 +1,6 @@
 import xmltodict
 
+
 # open and pass the coins file to the dictionary, catch the currencies
 def get_currencies():
     with open("static/currency.xml", "rb") as currency_fl:
@@ -16,8 +17,8 @@ def get_conversions():
 
     available_conversions = {}
 
-    conversion = dic_convert["xml"]
-    for convert_duo in conversion:
+    conversions = dic_convert["xml"]
+    for convert_duo in conversions:
         original_currency, final_currency = convert_duo.split("-")
         if original_currency in available_conversions:
             available_conversions[original_currency].append(final_currency)
@@ -25,8 +26,4 @@ def get_conversions():
             available_conversions[original_currency] = [final_currency]
 
     return available_conversions
-
-
-def convert_currency():
-    print("convert")
 
